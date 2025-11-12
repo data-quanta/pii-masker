@@ -16,7 +16,7 @@ A Chrome extension that detects and masks Personally Identifiable Information (P
 - **AI-Powered Detection** - Uses machine learning (BERT) to detect names, organizations, and locations
 - **Pattern Matching** - Detects emails, phone numbers, SSNs, credit cards, and more
 - **Preview Before Sending** - Review what will be masked before submission
-- **Universal Support** - Works on any website including ChatGPT, Claude, and others
+- **Supported Sites** - ChatGPT, Claude, Gemini, Copilot, Poe, Perplexity, You.com
 - **Fast Performance** - Regex detection in under 10ms, ML detection in 100-300ms
 
 ## Quick Start

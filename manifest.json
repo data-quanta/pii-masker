@@ -9,7 +9,13 @@
         "offscreen"
     ],
     "host_permissions": [
-        "<all_urls>"
+        "https://chat.openai.com/*",
+        "https://chatgpt.com/*",
+        "https://claude.ai/*",
+        "https://gemini.google.com/*",
+        "https://copilot.microsoft.com/*",
+        "https://poe.com/*",
+        "https://perplexity.ai/*"
     ],
     "background": {
         "service_worker": "background.js"
@@ -17,7 +23,14 @@
     "content_scripts": [
         {
             "matches": [
-                "<all_urls>"
+                "https://chat.openai.com/*",
+                "https://chatgpt.com/*",
+                "https://claude.ai/*",
+                "https://gemini.google.com/*",
+                "https://copilot.microsoft.com/*",
+                "https://poe.com/*",
+                "https://perplexity.ai/*",
+                "https://you.com/*"
             ],
             "js": [
                 "ml-detector.js",
