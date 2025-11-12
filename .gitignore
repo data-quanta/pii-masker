@@ -1,0 +1,56 @@
+# Python
+.venv/
+venv/
+env/
+*.pyc
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+
+# Jupyter Notebooks
+*.ipynb
+.ipynb_checkpoints/
+
+# Development files
+*.log
+*.bak
+*.swp
+*.tmp
+*~
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build outputs
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+*.code-workspace
+
+# Extension packaging
+*.zip
+*.crx
+*.pem
+
+# Git
+.gitattributes
+
+# Logs
+*.log

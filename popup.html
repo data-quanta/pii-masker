@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>PII Masker</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 380px;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #1f2937;
+        }
+
+        .container {
+            background: white;
+            border-radius: 0;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 24px 20px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .app-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 0 0 8px 0;
+        }
+
+        .app-icon {
+            font-size: 32px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        h1 {
+            font-size: 24px;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .app-tagline {
+            font-size: 13px;
+            opacity: 0.9;
+            margin: 0;
+            font-weight: 400;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 12px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .status-badge.active {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .status-badge.inactive {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-badge.active .status-dot {
+            background: #10b981;
+        }
+
+        .status-badge.inactive .status-dot {
+            background: #ef4444;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #9ca3af;
+            margin-bottom: 12px;
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .toggle-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-color: #667eea;
+        }
+
+        .toggle-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toggle-icon {
+            font-size: 24px;
+            filter: grayscale(50%);
+            transition: filter 0.3s ease;
+        }
+
+        .toggle-container:hover .toggle-icon {
+            filter: grayscale(0%);
+        }
+
+        .toggle-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .toggle-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 2px;
+        }
+
+        .toggle-description {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 28px;
+            flex-shrink: 0;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%);
+            transition: .4s;
+            border-radius: 28px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        input:checked+.slider {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(24px);
+        }
+
+        .info-box {
+            padding: 16px;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-radius: 12px;
+            border-left: 4px solid #3b82f6;
+            margin-bottom: 12px;
+        }
+
+        .info-box-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .info-box-content {
+            font-size: 12px;
+            color: #1e3a8a;
+            line-height: 1.6;
+        }
+
+        .info-box-content div {
+            margin-bottom: 4px;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
+            margin: 16px 0;
+        }
+
+        .footer {
+            padding: 16px 20px;
+            background: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+            text-align: center;
+        }
+
+        .footer-content {
+            font-size: 11px;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .footer-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: white;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #10b981;
+            margin-top: 8px;
+            border: 1px solid #d1fae5;
+        }
+
+        .footer-version {
+            color: #9ca3af;
+            font-size: 10px;
+            margin-top: 8px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #dbeafe;
+            color: #1e40af;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <div class="app-title">
+                    <span class="app-icon">🛡️</span>
+                    <div>
+                        <h1>PII Masker</h1>
+                        <p class="app-tagline">Privacy Protection Made Simple</p>
+                    </div>
+                </div>
+                <div id="status" class="status-badge">
+                    <span class="status-dot"></span>
+                    <span>Loading...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <div class="section-title">Controls</div>
+
+                <div class="toggle-container" id="protectionToggleContainer">
+                    <div class="toggle-info">
+                        <span class="toggle-icon">🔒</span>
+                        <div class="toggle-text">
+                            <span class="toggle-label">Protection</span>
+                            <span class="toggle-description">Enable PII masking (reload page to apply)</span>
+                        </div>
+                    </div>
+                    <label class="switch" id="protectionSwitchLabel">
+                        <input type="checkbox" id="enableToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+            </div>
+
+            <div class="info-box" id="mlInfo">
+                <div class="info-box-title">
+                    <span>💡</span>
+                    <span>Protection Features</span>
+                </div>
+                <div class="info-box-content">
+                    <div>✓ ML-powered detection (names, organizations, locations)</div>
+                    <div>✓ Pattern-based detection (email, phone, SSN, credit card)</div>
+                    <div>✓ Real-time masking before submission</div>
+                    <div>✓ 100% local processing - no data sent</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-content">
+                <div class="footer-badge">
+                    <span>🔐</span>
+                    <span>100% Local Processing</span>
+                </div>
+                <div style="margin-top: 8px; color: #6b7280; font-size: 11px;">
+                    Your data never leaves your browser
+                </div>
+                <div class="footer-version">Version 0.1.0</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>
