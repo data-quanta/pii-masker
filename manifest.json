@@ -8,15 +8,6 @@
         "activeTab",
         "offscreen"
     ],
-    "host_permissions": [
-        "https://chat.openai.com/*",
-        "https://chatgpt.com/*",
-        "https://claude.ai/*",
-        "https://gemini.google.com/*",
-        "https://copilot.microsoft.com/*",
-        "https://poe.com/*",
-        "https://perplexity.ai/*"
-    ],
     "background": {
         "service_worker": "background.js"
     },
