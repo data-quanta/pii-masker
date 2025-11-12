@@ -60,8 +60,8 @@ We may update this privacy policy to reflect changes in our practices or for leg
 
 ## Contact
 For privacy concerns or questions:
-- GitHub Issues: [Your GitHub Repository URL]
-- Email: [Your Contact Email]
+- GitHub Issues: https://github.com/data-quanta/pii-masker/issues
+- GitHub Repository: https://github.com/data-quanta/pii-masker
 
 ## Consent
 By installing and using PII Masker, you agree to this privacy policy.
