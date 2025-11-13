@@ -57,3 +57,5 @@ desktop.ini
 
 # google_store_assets
 google_store_files/*
+
+build.sh
