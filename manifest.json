@@ -1,11 +1,10 @@
 {
     "manifest_version": 3,
     "name": "PII Masker",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Protect sensitive information before sending to AI chatbots. 100% local processing - your data never leaves your device.",
     "permissions": [
         "storage",
-        "activeTab",
         "offscreen"
     ],
     "background": {

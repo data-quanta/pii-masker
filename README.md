@@ -87,7 +87,7 @@ Contact me at [REDACTED_EMAIL] or [REDACTED_PHONE].
 3. **No Telemetry** - No data is sent to us or any third party
 4. **Minimal Permissions** - Only requests necessary browser permissions:
    - `storage` - Save your extension settings locally
-   - `activeTab` - Interact with the current webpage
+
    - `offscreen` - Run ML model in isolated context
    - `<all_urls>` - Work on any website you choose
 

@@ -56,4 +56,4 @@ desktop.ini
 *.log
 
 # google_store_assets
-google_store_assets/
+google_store_files/*

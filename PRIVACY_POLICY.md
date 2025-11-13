@@ -40,7 +40,7 @@ The extension uses Chrome's local storage API (`chrome.storage.local`) to save:
 
 The extension requires the following Chrome permissions:
 
-- **`activeTab`**: To detect text input in the current tab's chat interface
+
 - **`storage`**: To save your preferences and temporary PII mappings locally
 - **`offscreen`**: To run the ML model in an isolated context for better performance
 - **`scripting`**: To inject the PII detection interface into supported websites
