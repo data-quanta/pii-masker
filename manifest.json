@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "PII Masker",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Protect sensitive information before sending to AI chatbots. 100% local processing - your data never leaves your device.",
     "permissions": [
         "storage",
@@ -20,7 +20,9 @@
                 "https://copilot.microsoft.com/*",
                 "https://poe.com/*",
                 "https://perplexity.ai/*",
-                "https://you.com/*"
+                "https://you.com/*",
+                "https://grok.com/*",
+                "https://x.com/*"
             ],
             "js": [
                 "ml-detector.js",

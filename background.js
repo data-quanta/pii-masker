@@ -69,22 +69,45 @@ async function initializeMLModel() {
         }
 
         // Request offscreen document to load ML model
-        const response = await new Promise((resolve, reject) => {
-            const timeout = setTimeout(() => {
-                reject(new Error('Timeout waiting for offscreen document response (120s)'));
-            }, 120000);
+        // Retry logic for connection establishment
+        let attempts = 0;
+        const maxAttempts = 3;
+        let response;
 
-            chrome.runtime.sendMessage({
-                action: 'initializeMLOffscreen'
-            }, (response) => {
-                clearTimeout(timeout);
-                if (chrome.runtime.lastError) {
-                    reject(new Error(chrome.runtime.lastError.message));
+        while (attempts < maxAttempts) {
+            try {
+                response = await new Promise((resolve, reject) => {
+                    const timeout = setTimeout(() => {
+                        reject(new Error('Timeout waiting for offscreen document response (120s)'));
+                    }, 120000);
+
+                    chrome.runtime.sendMessage({
+                        action: 'initializeMLOffscreen'
+                    }, (res) => {
+                        clearTimeout(timeout);
+                        if (chrome.runtime.lastError) {
+                            // If receiving end doesn't exist, we might need to wait a bit more
+                            if (chrome.runtime.lastError.message.includes('Receiving end does not exist')) {
+                                reject(new Error('Receiving end does not exist'));
+                            } else {
+                                reject(new Error(chrome.runtime.lastError.message));
+                            }
+                        } else {
+                            resolve(res);
+                        }
+                    });
+                });
+                break; // Success
+            } catch (error) {
+                attempts++;
+                if (error.message === 'Receiving end does not exist' && attempts < maxAttempts) {
+                    console.log(`PII Masker: Offscreen not ready, retrying (${attempts}/${maxAttempts})...`);
+                    await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1s before retry
                 } else {
-                    resolve(response);
+                    throw error; // Re-throw other errors or if max attempts reached
                 }
-            });
-        });
+            }
+        }
 
         if (response && response.success) {
             mlModelLoaded = true;

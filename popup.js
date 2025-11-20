@@ -2,6 +2,8 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const enableToggle = document.getElementById('enableToggle');
     const statusEl = document.getElementById('status');
+    const reloadBtn = document.getElementById('reloadBtn');
+    const statusValueEl = document.querySelector('.stat-value'); // First stat value is Status
 
     // Load current settings and ensure ML is always enabled
     const settings = await chrome.storage.local.get(['enabled', 'useML']);
@@ -20,19 +22,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         await chrome.storage.local.set({ enabled });
         updateStatus(enabled);
 
-        // Show user feedback
-        if (!enabled) {
-            // Show a temporary message
-            const statusEl = document.getElementById('status');
-            const originalHTML = statusEl.innerHTML;
-            statusEl.innerHTML = '<span class="status-dot"></span><span>Reload page to disable</span>';
-            statusEl.style.fontSize = '12px';
-
-            setTimeout(() => {
-                statusEl.innerHTML = originalHTML;
-                statusEl.style.fontSize = '';
-            }, 3000);
-        }
+        // Show reload button
+        reloadBtn.classList.add('visible');
+        reloadBtn.style.display = 'flex';
 
         // Notify all tabs about the change (ML is always enabled)
         const tabs = await chrome.tabs.query({});
@@ -47,13 +39,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
+    // Handle reload button click
+    reloadBtn.addEventListener('click', async () => {
+        const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+        if (tabs[0]) {
+            chrome.tabs.reload(tabs[0].id);
+            window.close(); // Close popup after action
+        }
+    });
+
     function updateStatus(enabled) {
         if (enabled) {
             statusEl.innerHTML = '<span class="status-dot"></span><span>Protection Active</span>';
             statusEl.className = 'status-badge active';
+            if (statusValueEl) statusValueEl.textContent = 'Active';
         } else {
             statusEl.innerHTML = '<span class="status-dot"></span><span>Protection Inactive</span>';
             statusEl.className = 'status-badge inactive';
+            if (statusValueEl) statusValueEl.textContent = 'Inactive';
         }
     }
 
